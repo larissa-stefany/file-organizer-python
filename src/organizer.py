@@ -7,17 +7,25 @@ from collections import Counter
 from pathlib import Path
 
 from src.classifier import classify_file
+from src.filters import normalize_extensions, should_ignore
 
 
 class FileOrganizer:
     """Organize files from a source directory into category folders."""
 
-    def __init__(self, source: Path, dry_run: bool = False) -> None:
+    def __init__(
+        self,
+        source: Path,
+        dry_run: bool = False,
+        ignored_extensions: list[str] | None = None,
+    ) -> None:
         self.source = source
         self.dry_run = dry_run
+        self.ignored_extensions = normalize_extensions(ignored_extensions)
         self.moved_files: list[tuple[Path, Path]] = []
         self.errors: list[str] = []
         self.categories: Counter[str] = Counter()
+        self.ignored_files: list[str] = []
 
     def validate_source(self) -> None:
         if not self.source.exists():
@@ -47,6 +55,10 @@ class FileOrganizer:
         files = [item for item in self.source.iterdir() if item.is_file()]
 
         for file_path in files:
+            if should_ignore(file_path, self.ignored_extensions):
+                self.ignored_files.append(file_path.name)
+                continue
+
             try:
                 category = classify_file(file_path)
                 folder = self.source / category
@@ -64,6 +76,7 @@ class FileOrganizer:
         return {
             "total_files": len(files),
             "moved_files": len(self.moved_files),
+            "ignored_files": list(self.ignored_files),
             "categories": dict(self.categories),
             "errors": list(self.errors),
             "dry_run": self.dry_run,
