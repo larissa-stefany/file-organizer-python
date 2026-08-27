@@ -17,12 +17,23 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Mostra o que seria feito sem mover os arquivos",
     )
+    parser.add_argument(
+        "--ignore-ext",
+        action="append",
+        default=[],
+        metavar="EXT",
+        help="Ignora uma extensão. Pode ser usado várias vezes, ex.: --ignore-ext .tmp",
+    )
     return parser
 
 
 def main() -> None:
     args = build_parser().parse_args()
-    organizer = FileOrganizer(args.path, dry_run=args.dry_run)
+    organizer = FileOrganizer(
+        args.path,
+        dry_run=args.dry_run,
+        ignored_extensions=args.ignore_ext,
+    )
 
     try:
         summary = organizer.organize()
@@ -32,6 +43,9 @@ def main() -> None:
     print(f"Arquivos processados: {summary['moved_files']}")
     for category, count in sorted(summary["categories"].items()):
         print(f"- {category}: {count}")
+
+    if summary["ignored_files"]:
+        print(f"Arquivos ignorados: {len(summary['ignored_files'])}")
 
     if args.dry_run:
         print("Simulação concluída. Nenhum arquivo foi movido.")
