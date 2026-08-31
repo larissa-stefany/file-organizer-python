@@ -24,6 +24,16 @@ python main.py "C:/Users/SeuUsuario/Downloads" --dry-run
 
 O programa classifica os arquivos e mostra o resumo sem alterar a pasta.
 
+### Exemplo prático de dry-run
+
+Uma boa forma de demonstrar o projeto no portfólio é criar uma pasta de teste com alguns arquivos e executar primeiro o modo de simulação. Assim, é possível visualizar as categorias identificadas antes de permitir qualquer movimentação real dos arquivos.
+
+```bash
+python main.py "C:/Users/SeuUsuario/Desktop/teste-organizador" --dry-run
+```
+
+Depois de conferir o resultado, execute novamente sem `--dry-run` para realizar a organização.
+
 ## Exemplo de organização
 
 Antes:
