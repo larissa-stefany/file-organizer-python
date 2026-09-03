@@ -4,6 +4,15 @@ Automação em Python para organizar arquivos de uma pasta por categoria, evitan
 
 O projeto foi desenvolvido com foco em **automação de tarefas usando apenas a biblioteca padrão do Python**, sem Pandas e sem dependências externas.
 
+## Destaques do projeto
+
+- Organização automática de arquivos por extensão
+- Tratamento seguro de nomes duplicados
+- Modo de simulação com `--dry-run`
+- Filtros para ignorar extensões específicas
+- Geração de relatório após a execução
+- Testes automatizados com `unittest`
+
 ## Objetivo
 
 Automatizar a organização de pastas como `Downloads`, classificando arquivos por extensão em categorias como:
